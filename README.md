@@ -1,32 +1,89 @@
 <p align="center">
-  <strong>Aether</strong><br>
-  One uplink. Three ways to use it on Linux.<br>
-  یک لینک. سه حالت استفاده روی لینوکس.
+  <a href="#english">English</a>
+  &nbsp;&nbsp;·&nbsp;&nbsp;
+  <a href="#fa">فارسی</a>
+</p>
+
+<a id="english"></a>
+
+# Aether
+
+<p align="center">
+  Uplink control for Linux.<br>
+  One link you already have. A terminal that knows what to do with it.
 </p>
 
 <p align="center">
-  <a href="#english">English</a> · <a href="#فارسی">فارسی</a>
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/terminal-dark.svg">
+    <img alt="Aether terminal. Version 1.1, endpoint 127.0.0.1:2080 running, application scope, menu open." src="docs/readme/terminal-light.svg" width="760">
+  </picture>
 </p>
 
 <p align="center">
-  <img alt="License" src="https://img.shields.io/badge/license-MIT-111111">
-  <img alt="Platform" src="https://img.shields.io/badge/platform-Linux%20%2B%20systemd-111111">
-  <img alt="Engine" src="https://img.shields.io/badge/engine-sing--box%201.14.2-111111">
+  <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-0e7490?style=flat"></a>
+  <img alt="Linux with systemd" src="https://img.shields.io/badge/platform-Linux%20%2B%20systemd-0f766e?style=flat">
+  <a href="https://github.com/SagerNet/sing-box"><img alt="sing-box 1.14.2" src="https://img.shields.io/badge/sing--box-1.14.2-155e75?style=flat"></a>
+  <img alt="Release 1.1" src="https://img.shields.io/badge/release-1.1-334155?style=flat">
 </p>
 
-Aether takes a proxy or share link you already have and puts it to work on a Linux server. It does not sell access and it does not run a VPN panel of its own. The engine is [sing-box](https://github.com/SagerNet/sing-box), bound to `127.0.0.1`. You get a terminal menu for the jobs that stall when GitHub, Docker Hub, or the Ubuntu archive is hard to reach: package installs, image pulls, file downloads, and the official 3x-ui installer.
+<p align="center">
+  <a href="#install">Install</a>
+  &nbsp;·&nbsp;
+  <a href="#scopes">Scopes</a>
+  &nbsp;·&nbsp;
+  <a href="#links">Links</a>
+  &nbsp;·&nbsp;
+  <a href="#menu">Menu</a>
+  &nbsp;·&nbsp;
+  <a href="#commands">Commands</a>
+  &nbsp;·&nbsp;
+  <a href="#fa">فارسی</a>
+</p>
 
----
+You bring the uplink. Aether runs it on the server and opens a menu for the jobs that stall when GitHub, Docker Hub, or the Ubuntu archive is hard to reach: package installs, image pulls, file downloads, and the official 3x-ui installer.
 
-## English
+The engine is [sing-box](https://github.com/SagerNet/sing-box) 1.14.2. The local endpoint stays on `127.0.0.1`. Release 1.1.
 
-### Traffic scope
+<a id="install"></a>
+
+## Install
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/BemoBit/Aether/main/install.sh | sudo bash
+sudo aether
+```
+
+Read [`install.sh`](install.sh) before you pipe it to a shell. `ae` is a shortcut for `aether` when that name is free.
+
+From a checkout of this repository:
+
+```bash
+sudo bash install.sh
+sudo aether
+```
+
+The installer downloads sing-box for `amd64` or `arm64`. If GitHub is unreachable, place a sing-box binary at `/usr/local/lib/aether/sing-box` and run `sudo aether` again.
+
+Package commands and the Docker apt repository need Debian or Ubuntu. The uplink service needs systemd. On any other systemd distribution, the proxy and the full tunnel are the parts that run. Aether says so when a menu action needs apt.
+
+<a id="scopes"></a>
+
+## Scopes
+
+```mermaid
+flowchart LR
+  link["Your link"] --> endpoint["127.0.0.1:2080"]
+  endpoint --> tool["Application"]
+  endpoint --> system["System proxy"]
+  endpoint --> tunnel["Full tunnel"]
+```
 
 | Scope | Command | What crosses the uplink |
 | --- | --- | --- |
-| Application | `aether scope tool` | Only programs Aether launches, and `aether exec`. Everything else stays as it was. This is the default. |
-| System proxy | `aether scope system` | The application scope, plus a published system proxy. Programs that honor `http_proxy`, `https_proxy`, and `all_proxy` use the uplink. apt is included. |
-| Full tunnel | `aether scope tunnel` | All outbound traffic, including programs that ignore proxy settings. |
+| Application | `aether scope tool` | Programs Aether launches, and `aether exec`. This is the default. |
+| System proxy | `aether scope system` | The application scope, plus programs that honor `http_proxy`, `https_proxy`, and `all_proxy`. apt is included. |
+| Full tunnel | `aether scope tunnel` | Outbound traffic from the server, including programs that ignore proxy settings. |
 
 Full tunnel keeps a direct route for the current SSH client when `SSH_CONNECTION` is set. If the server stops answering, open the console and run:
 
@@ -34,7 +91,17 @@ Full tunnel keeps a direct route for the current SSH client when `SSH_CONNECTION
 sudo aether scope tool
 ```
 
-### Supported uplinks
+Enabling the full tunnel from a script needs an explicit confirmation:
+
+```bash
+sudo AETHER_ASSUME_YES=1 aether scope tunnel
+```
+
+<a id="links"></a>
+
+## Links
+
+Paste a share link, or enter an HTTP or SOCKS proxy as host, port, and an optional login.
 
 | Link | What Aether accepts |
 | --- | --- |
@@ -45,29 +112,11 @@ sudo aether scope tool
 | Trojan | `trojan://` |
 | Shadowsocks | SIP002 and the legacy base64 form |
 
-Paste the link, or enter an HTTP or SOCKS proxy as host, port, and an optional login. XHTTP, SplitHTTP, and mKCP are refused up front. The bundled sing-box build does not implement them.
+XHTTP, SplitHTTP, and mKCP are refused up front. The bundled sing-box build does not implement them.
 
-### Install
+<a id="menu"></a>
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/BemoBit/Aether/main/install.sh | sudo bash
-sudo aether
-```
-
-`ae` is a shortcut for `aether` when that command name is free.
-
-From a checkout of this repository:
-
-```bash
-sudo bash install.sh
-sudo aether
-```
-
-The installer downloads sing-box 1.14.2 for `amd64` or `arm64`. If GitHub is unreachable, copy a sing-box binary to `/usr/local/lib/aether/sing-box` and run `sudo aether` again.
-
-Package commands and the Docker apt repository need Debian or Ubuntu. The uplink service needs systemd. The proxy and the full tunnel are the parts that matter on any other systemd distribution. Aether will say so when a menu action needs apt.
-
-### Menu
+## Menu
 
 | | Action |
 | --- | --- |
@@ -83,7 +132,9 @@ Package commands and the Docker apt repository need Debian or Ubuntu. The uplink
 
 The first run asks for an uplink before the menu. Settings can replace it later.
 
-### Commands
+<a id="commands"></a>
+
+## Commands
 
 ```bash
 sudo aether
@@ -97,20 +148,16 @@ sudo aether scope tunnel
 sudo aether set 'vless://...'
 sudo aether parse 'vless://...'
 sudo aether exec -- curl -I https://example.com
+sudo aether update
 sudo aether version
 ```
 
 `aether parse` prints the server, port, security, and transport. It does not print passwords, UUIDs, or keys.
 
-Enabling the full tunnel from a script needs an explicit confirmation:
+<details>
+<summary>What each scope writes</summary>
 
-```bash
-sudo AETHER_ASSUME_YES=1 aether scope tunnel
-```
-
-### What each scope writes
-
-Application mode starts the local sing-box service and nothing else.
+Application mode starts the local sing-box service.
 
 System proxy also writes:
 
@@ -122,7 +169,10 @@ Open a new login shell before expecting every program to see the new variables. 
 
 Full tunnel adds an `aether0` interface and routes outbound traffic through it. Private destinations stay direct. sing-box resolves the uplink host with the system resolver and resolves other destinations through the uplink. When `nft` is installed, `auto_redirect` is turned on so forwarded traffic, including Docker, follows the tunnel. If that start fails, Aether retries once without it.
 
-### Paths
+</details>
+
+<details>
+<summary>Paths</summary>
 
 | Path | Role |
 | --- | --- |
@@ -134,7 +184,10 @@ Full tunnel adds an `aether0` interface and routes outbound traffic through it. 
 | `/var/lib/aether/` | Baseline of Docker settings, taken before Aether changes them |
 | `/var/log/aether.log` | Short action log |
 
-### Uninstall
+</details>
+
+<details>
+<summary>Uninstall</summary>
 
 From Settings, or:
 
@@ -146,7 +199,20 @@ sudo bash /usr/local/lib/aether/uninstall.sh --no-restore
 
 `--purge` also removes the saved uplink, the Docker baseline, and the log. `--no-restore` leaves Docker's daemon settings and the system proxy files where they are.
 
-### Development
+</details>
+
+<details>
+<summary>Limits</summary>
+
+- The share link is stored on disk. The config directory is mode 700 and the file is mode 600.
+- The local proxy binds to `127.0.0.1` only. If it ever listens on a public address, Aether stops it.
+- The first package install, and only that install, can temporarily point DNS at Shecan (`178.22.122.100`, `185.51.200.2`) and an ArvanCloud mirror when apt cannot be reached directly. The previous resolver and apt sources are put back afterwards.
+- 3x-ui is installed by the upstream project's own installer. Aether downloads it and passes a release tag.
+
+</details>
+
+<details>
+<summary>Tests</summary>
 
 ```bash
 python3 -m unittest tests/test_link.py
@@ -154,88 +220,147 @@ python3 -m unittest tests/test_link.py
 
 The parser tests need no root access and no network. `sudo ./aether` from a checkout uses that checkout's code and the system paths under `/etc/aether`.
 
-### Limits
+</details>
 
-- The share link is stored on disk. The config directory is mode 700 and the file is mode 600.
-- The local proxy binds to `127.0.0.1` only. If it ever listens on a public address, Aether stops it.
-- The first package install, and only that install, can temporarily point DNS at Shecan (`178.22.122.100`, `185.51.200.2`) and an ArvanCloud mirror when apt cannot be reached directly. The previous resolver and apt sources are put back afterwards.
-- 3x-ui is installed by the upstream project's own installer. Aether downloads it and passes a release tag.
+<a id="fa"></a>
 
----
+<div dir="rtl">
 
-## فارسی
+<h2>فارسی</h2>
 
-Aether ابزار خط فرمان برای سرور لینوکس است. پروکسی نمی‌فروشد و پنل VPN هم بالا نمی‌آورد. یک لینک یا پروکسی را که خودتان دارید می‌گیرد و روی سیستم قابل استفاده می‌کند. موتور sing-box است و فقط روی `127.0.0.1` گوش می‌دهد.
+<p align="center">
+  <a href="#english">English</a>
+</p>
 
-به درد سروری می‌خورد که گرفتن بسته، ایمیج Docker، یا فایل از GitHub گیر می‌کند. از داخل منو می‌شود لیست بسته‌ها را به‌روز کرد، Docker نصب کرد، فایل دانلود کرد، و نصب‌کنندهٔ رسمی 3x-ui را اجرا کرد.
+<p align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/readme/terminal-dark.svg">
+    <img alt="منوی ترمینال Aether. نسخه 1.1، نقطه 127.0.0.1:2080 در حال اجرا، حالت برنامه." src="docs/readme/terminal-light.svg" width="760">
+  </picture>
+</p>
 
-### سه حالت ترافیک
+Aether کنترل آپ‌لینک برای سرور لینوکس است. لینکی را که خودتان دارید روی سیستم به کار می‌گیرد و منویی در ترمینال باز می‌کند. موتور <a href="https://github.com/SagerNet/sing-box">sing-box</a> نسخه 1.14.2 است و فقط روی <code dir="ltr">127.0.0.1</code> گوش می‌دهد. نسخهٔ فعلی 1.1 است.
 
-| حالت | دستور | چه ترافیکی از لینک رد می‌شود |
-| --- | --- | --- |
-| برنامه | `aether scope tool` | فقط برنامه‌هایی که خود Aether اجرا می‌کند، و `aether exec`. بقیهٔ سیستم دست نمی‌خورد. این حالت پیش‌فرض است. |
-| پروکسی سیستم | `aether scope system` | حالت برنامه، به‌علاوهٔ پروکسی منتشرشده در سیستم‌عامل. هر برنامه‌ای که `http_proxy` و `https_proxy` و `all_proxy` را بخواند از همین لینک استفاده می‌کند. apt هم شامل می‌شود. |
-| تونل کامل | `aether scope tunnel` | کل ترافیک خروجی سرور، حتی برنامه‌هایی که تنظیم پروکسی را نادیده می‌گیرند. |
+برای سروری است که نصب بسته، دریافت ایمیج Docker، یا دانلود از GitHub گیر می‌کند. از داخل منو می‌شود فهرست بسته‌ها را به‌روز کرد، Docker نصب کرد، فایل دانلود کرد، و نصب‌کنندهٔ رسمی 3x-ui را اجرا کرد.
 
-در تونل کامل، اگر متغیر `SSH_CONNECTION` پر باشد، مسیر مستقیم برای همان کلاینت SSH حفظ می‌شود. اگر سرور دیگر جواب نداد، از کنسول این را بزنید:
+<h3>نصب</h3>
 
-```bash
-sudo aether scope tool
-```
+<pre dir="ltr"><code>curl -fsSL https://raw.githubusercontent.com/BemoBit/Aether/main/install.sh | sudo bash
+sudo aether</code></pre>
 
-### لینک‌های قابل قبول
+<p>پیش از اجرای این دستور، <a href="install.sh"><code dir="ltr">install.sh</code></a> را بخوانید. اگر نام <code dir="ltr">ae</code> روی سیستم آزاد باشد، میانبر <code dir="ltr">aether</code> است.</p>
 
-| نوع | شکل ورودی |
-| --- | --- |
-| HTTP / HTTPS | `http://host:port`، با نام کاربری و رمز اختیاری |
-| SOCKS | `socks5://` و `socks4://` و `socks4a://` |
-| VLESS | TCP، وب‌سوکت، gRPC، HTTP، HTTPUpgrade، QUIC. TLS و Reality، از جمله `xtls-rprx-vision` روی TCP |
-| VMess | لینک استاندارد `vmess://` |
-| Trojan | `trojan://` |
-| Shadowsocks | هر دو شکل SIP002 و base64 قدیمی |
+<p>از روی کلون همین مخزن:</p>
 
-لینک را می‌شود چسباند، یا برای HTTP و SOCKS میزبان و پورت و در صورت نیاز اطلاعات ورود را جدا نوشت. XHTTP و SplitHTTP و mKCP همان اول رد می‌شوند. نسخهٔ sing-box که همراه برنامه می‌آید این‌ها را ندارد.
+<pre dir="ltr"><code>sudo bash install.sh
+sudo aether</code></pre>
 
-### نصب
+<p>نصب‌کننده sing-box را برای <code dir="ltr">amd64</code> یا <code dir="ltr">arm64</code> می‌گیرد. اگر سرور به GitHub نمی‌رسد، فایل اجرایی sing-box را در <code dir="ltr">/usr/local/lib/aether/sing-box</code> بگذارید و دوباره <code dir="ltr">sudo aether</code> را اجرا کنید.</p>
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/BemoBit/Aether/main/install.sh | sudo bash
-sudo aether
-```
+<p>دستورهای بسته و مخزن apt داکر به دبیان یا اوبونتو نیاز دارند. خود سرویس لینک به systemd نیاز دارد. روی توزیع دیگری که systemd دارد، پروکسی و تونل کامل کار می‌کنند. هر جا منو به apt نیاز داشته باشد، خودش می‌گوید.</p>
 
-اگر دستور `ae` روی سیستم اشغال نشده باشد، میانبر `aether` است.
+<h3>سه حالت ترافیک</h3>
 
-از روی کلون همین مخزن:
+<table>
+  <thead>
+    <tr>
+      <th>حالت</th>
+      <th>دستور</th>
+      <th>چه ترافیکی از لینک رد می‌شود</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>برنامه</td>
+      <td><code dir="ltr">aether scope tool</code></td>
+      <td>فقط برنامه‌هایی که خود Aether اجرا می‌کند، و <code dir="ltr">aether exec</code>. این حالت پیش‌فرض است.</td>
+    </tr>
+    <tr>
+      <td>پروکسی سیستم</td>
+      <td><code dir="ltr">aether scope system</code></td>
+      <td>حالت برنامه، به‌علاوهٔ برنامه‌هایی که <code dir="ltr">http_proxy</code> و <code dir="ltr">https_proxy</code> و <code dir="ltr">all_proxy</code> را می‌خوانند. apt هم شامل می‌شود.</td>
+    </tr>
+    <tr>
+      <td>تونل کامل</td>
+      <td><code dir="ltr">aether scope tunnel</code></td>
+      <td>ترافیک خروجی سرور، حتی برنامه‌هایی که تنظیم پروکسی را نادیده می‌گیرند.</td>
+    </tr>
+  </tbody>
+</table>
 
-```bash
-sudo bash install.sh
-sudo aether
-```
+<p>در تونل کامل، اگر متغیر <code dir="ltr">SSH_CONNECTION</code> پر باشد، مسیر مستقیم برای همان کلاینت SSH حفظ می‌شود. اگر سرور دیگر جواب نداد، از کنسول این را بزنید:</p>
 
-نصب‌کننده sing-box نسخهٔ 1.14.2 را برای `amd64` یا `arm64` می‌گیرد. اگر سرور به GitHub نمی‌رسد، فایل اجرایی sing-box را در `/usr/local/lib/aether/sing-box` بگذارید و دوباره `sudo aether` را اجرا کنید.
+<pre dir="ltr"><code>sudo aether scope tool</code></pre>
 
-دستورهای بسته و مخزن apt داکر به دبیان یا اوبونتو نیاز دارند. خود سرویس لینک به systemd نیاز دارد. روی توزیع دیگری که systemd دارد، پروکسی و تونل کامل کار می‌کنند. هر جا منو به apt نیاز داشته باشد، خودش می‌گوید.
+<p>فعال کردن تونل کامل از داخل اسکریپت تأیید صریح می‌خواهد:</p>
 
-### منو
+<pre dir="ltr"><code>sudo AETHER_ASSUME_YES=1 aether scope tunnel</code></pre>
 
-| | کار |
-| --- | --- |
-| ۱ | تست GitHub، آرشیو اوبونتو، و رجیستری Docker |
-| ۲ | به‌روزرسانی لیست بسته‌ها، ارتقا، یا نصب یک بسته |
-| ۳ | نصب Docker، دریافت ایمیج، یا روشن و خاموش کردن پروکسی دیمون |
-| ۴ | دانلود فایل از طریق لینک |
-| ۵ | نصب 3x-ui سنایی با نصب‌کنندهٔ رسمی |
-| ۶ | انتخاب حالت برنامه، پروکسی سیستم، یا تونل کامل |
-| ۷ | وضعیت، تعویض لینک، فعال‌سازی، غیرفعال‌سازی، حذف |
-| ۸ | به‌روزرسانی خود Aether از GitHub |
-| ۰ | خروج |
+<h3>لینک‌های قابل قبول</h3>
 
-اجرای اول، پیش از منو، لینک را می‌پرسد. بعداً از تنظیمات عوض می‌شود.
+<p>لینک را بچسبانید، یا برای HTTP و SOCKS میزبان، پورت، و در صورت نیاز اطلاعات ورود را جدا بنویسید.</p>
 
-### دستورها
+<table>
+  <thead>
+    <tr>
+      <th>نوع</th>
+      <th>شکل ورودی</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>HTTP / HTTPS</td>
+      <td><code dir="ltr">http://host:port</code>، با نام کاربری و رمز اختیاری</td>
+    </tr>
+    <tr>
+      <td>SOCKS</td>
+      <td><code dir="ltr">socks5://</code> و <code dir="ltr">socks4://</code> و <code dir="ltr">socks4a://</code></td>
+    </tr>
+    <tr>
+      <td>VLESS</td>
+      <td>TCP، وب‌سوکت، gRPC، HTTP، HTTPUpgrade، QUIC. TLS و Reality، از جمله <code dir="ltr">xtls-rprx-vision</code> روی TCP</td>
+    </tr>
+    <tr>
+      <td>VMess</td>
+      <td>لینک استاندارد <code dir="ltr">vmess://</code></td>
+    </tr>
+    <tr>
+      <td>Trojan</td>
+      <td><code dir="ltr">trojan://</code></td>
+    </tr>
+    <tr>
+      <td>Shadowsocks</td>
+      <td>هر دو شکل SIP002 و base64 قدیمی</td>
+    </tr>
+  </tbody>
+</table>
 
-```bash
-sudo aether
+<p>XHTTP و SplitHTTP و mKCP همان اول رد می‌شوند. نسخهٔ sing-box که همراه برنامه می‌آید این‌ها را ندارد.</p>
+
+<h3>منو</h3>
+
+<table>
+  <thead>
+    <tr><th></th><th>کار</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>1</td><td>تست GitHub، آرشیو اوبونتو، و رجیستری Docker</td></tr>
+    <tr><td>2</td><td>به‌روزرسانی فهرست بسته‌ها، ارتقا، یا نصب یک بسته</td></tr>
+    <tr><td>3</td><td>نصب Docker، دریافت ایمیج، یا روشن و خاموش کردن پروکسی دیمون</td></tr>
+    <tr><td>4</td><td>دانلود فایل از طریق لینک</td></tr>
+    <tr><td>5</td><td>نصب 3x-ui سنایی با نصب‌کنندهٔ رسمی</td></tr>
+    <tr><td>6</td><td>انتخاب حالت برنامه، پروکسی سیستم، یا تونل کامل</td></tr>
+    <tr><td>7</td><td>وضعیت، تعویض لینک، فعال‌سازی، غیرفعال‌سازی، حذف</td></tr>
+    <tr><td>8</td><td>به‌روزرسانی خود Aether از GitHub</td></tr>
+    <tr><td>0</td><td>خروج</td></tr>
+  </tbody>
+</table>
+
+<p>اجرای اول، پیش از منو، لینک را می‌پرسد. بعداً از تنظیمات عوض می‌شود.</p>
+
+<h3>دستورها</h3>
+
+<pre dir="ltr"><code>sudo aether
 sudo aether status
 sudo aether check
 sudo aether on
@@ -246,66 +371,68 @@ sudo aether scope tunnel
 sudo aether set 'vless://...'
 sudo aether parse 'vless://...'
 sudo aether exec -- curl -I https://example.com
-sudo aether version
-```
+sudo aether update
+sudo aether version</code></pre>
 
-`aether parse` سرور، پورت، نوع امنیت و انتقال را نشان می‌دهد. رمز، UUID و کلید را چاپ نمی‌کند.
+<p><code dir="ltr">aether parse</code> سرور، پورت، نوع امنیت و انتقال را نشان می‌دهد. رمز، UUID و کلید را چاپ نمی‌کند.</p>
 
-فعال کردن تونل کامل از داخل اسکریپت تأیید صریح می‌خواهد:
+<details>
+<summary>هر حالت چه فایلی می‌نویسد</summary>
 
-```bash
-sudo AETHER_ASSUME_YES=1 aether scope tunnel
-```
+<p>حالت برنامه سرویس محلی sing-box را بالا می‌آورد.</p>
 
-### هر حالت چه فایلی می‌نویسد
+<p>پروکسی سیستم این‌ها را هم می‌نویسد:</p>
+<ul>
+  <li><code dir="ltr">/etc/profile.d/aether.sh</code></li>
+  <li><code dir="ltr">/etc/apt/apt.conf.d/80aether</code></li>
+  <li>یک بلوک علامت‌گذاری‌شده در <code dir="ltr">/etc/environment</code></li>
+</ul>
 
-حالت برنامه فقط سرویس محلی sing-box را بالا می‌آورد.
+<p>برای دیدن متغیرهای تازه، یک پوستهٔ ورود جدید باز کنید. سرویسی که از قبل در حال اجراست آن‌ها را نمی‌بیند. Docker متغیر محیط کاربر را نادیده می‌گیرد، برای همین پروکسی دیمون کلید جداگانه‌ای در منوی Docker دارد.</p>
 
-پروکسی سیستم این‌ها را هم می‌نویسد:
+<p>تونل کامل رابط <code dir="ltr">aether0</code> را می‌سازد و ترافیک خروجی را از آن رد می‌کند. مقصدهای خصوصی مستقیم می‌مانند. نام میزبان خود لینک با DNS سیستم حل می‌شود و بقیهٔ مقصدها از داخل لینک. اگر <code dir="ltr">nft</code> نصب باشد، <code dir="ltr">auto_redirect</code> روشن می‌شود تا ترافیک فورواردشده، از جمله Docker، هم از تونل رد شود. اگر این حالت بالا نیاید، Aether یک بار بدون آن دوباره تلاش می‌کند.</p>
+</details>
 
-- `/etc/profile.d/aether.sh`
-- `/etc/apt/apt.conf.d/80aether`
-- یک بلوک علامت‌گذاری‌شده در `/etc/environment`
+<details>
+<summary>مسیرها</summary>
 
-برای دیدن متغیرهای تازه، یک پوستهٔ ورود جدید باز کنید. سرویسی که از قبل در حال اجراست آن‌ها را نمی‌بیند. Docker متغیر محیط کاربر را نادیده می‌گیرد، برای همین پروکسی دیمون کلید جداگانه‌ای در منوی Docker دارد.
+<table>
+  <thead>
+    <tr><th>مسیر</th><th>نقش</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><code dir="ltr">/usr/local/bin/aether</code></td><td>دستور اصلی</td></tr>
+    <tr><td><code dir="ltr">/usr/local/bin/ae</code></td><td>میانبر</td></tr>
+    <tr><td><code dir="ltr">/usr/local/lib/aether/</code></td><td>برنامه، کتابخانه‌ها، فایل sing-box</td></tr>
+    <tr><td><code dir="ltr">/etc/aether/config.env</code></td><td>لینک ذخیره‌شده، مجوز 600</td></tr>
+    <tr><td><code dir="ltr">/etc/aether/sing-box.json</code></td><td>پیکربندی ساخته‌شدهٔ موتور، مجوز 600</td></tr>
+    <tr><td><code dir="ltr">/var/lib/aether/</code></td><td>نسخهٔ قبلی تنظیم Docker، پیش از دستکاری Aether</td></tr>
+    <tr><td><code dir="ltr">/var/log/aether.log</code></td><td>گزارش کوتاه کارها</td></tr>
+  </tbody>
+</table>
+</details>
 
-تونل کامل رابط `aether0` را می‌سازد و ترافیک خروجی را از آن رد می‌کند. مقصدهای خصوصی مستقیم می‌مانند. نام میزبان خود لینک با DNS سیستم حل می‌شود و بقیهٔ مقصدها از داخل لینک. اگر `nft` نصب باشد، `auto_redirect` روشن می‌شود تا ترافیک فورواردشده، از جمله Docker، هم از تونل رد شود. اگر این حالت بالا نیاید، Aether یک بار بدون آن دوباره تلاش می‌کند.
+<details>
+<summary>حذف</summary>
 
-### مسیرها
+<p>از منوی تنظیمات، یا:</p>
 
-| مسیر | نقش |
-| --- | --- |
-| `/usr/local/bin/aether` | دستور اصلی |
-| `/usr/local/bin/ae` | میانبر |
-| `/usr/local/lib/aether/` | برنامه، کتابخانه‌ها، فایل sing-box |
-| `/etc/aether/config.env` | لینک ذخیره‌شده، مجوز ۶۰۰ |
-| `/etc/aether/sing-box.json` | پیکربندی ساخته‌شدهٔ موتور، مجوز ۶۰۰ |
-| `/var/lib/aether/` | نسخهٔ قبلی تنظیم Docker، پیش از دستکاری Aether |
-| `/var/log/aether.log` | گزارش کوتاه کارها |
-
-### حذف
-
-از منوی تنظیمات، یا:
-
-```bash
-sudo bash /usr/local/lib/aether/uninstall.sh
+<pre dir="ltr"><code>sudo bash /usr/local/lib/aether/uninstall.sh
 sudo bash /usr/local/lib/aether/uninstall.sh --purge
-sudo bash /usr/local/lib/aether/uninstall.sh --no-restore
-```
+sudo bash /usr/local/lib/aether/uninstall.sh --no-restore</code></pre>
 
-`--purge` لینک ذخیره‌شده، نسخهٔ پشتیبان تنظیم Docker، و لاگ را هم پاک می‌کند. `--no-restore` تنظیم دیمون Docker و فایل‌های پروکسی سیستم را سر جایشان می‌گذارد.
+<p><code dir="ltr">--purge</code> لینک ذخیره‌شده، نسخهٔ پشتیبان تنظیم Docker، و لاگ را هم پاک می‌کند. <code dir="ltr">--no-restore</code> تنظیم دیمون Docker و فایل‌های پروکسی سیستم را سر جایشان می‌گذارد.</p>
+</details>
 
-### آزمون
+<details>
+<summary>حد کار</summary>
 
-```bash
-python3 -m unittest tests/test_link.py
-```
+<ul>
+  <li>لینک روی دیسک ذخیره می‌شود. پوشهٔ تنظیم حالت 700 دارد و خود فایل حالت 600.</li>
+  <li>پروکسی محلی فقط به <code dir="ltr">127.0.0.1</code> وصل می‌شود. اگر روی آدرس عمومی گوش بدهد، Aether متوقفش می‌کند.</li>
+  <li>فقط همان نصب اول بسته‌ها، اگر apt مستقیم در دسترس نباشد، موقتاً DNS را روی شکن (<code dir="ltr">178.22.122.100</code> و <code dir="ltr">185.51.200.2</code>) و مخزن آروان‌کلاد می‌گذارد. بعد از کار، resolver و سورس‌های apt به حالت قبل برمی‌گردند.</li>
+  <li>3x-ui با نصب‌کنندهٔ خود پروژهٔ بالادست نصب می‌شود. Aether آن را دانلود می‌کند و شمارهٔ نسخه را به آن می‌دهد.</li>
+</ul>
+</details>
 
-آزمون پارسر به ریشه و شبکه نیاز ندارد. `sudo ./aether` از داخل کلون، کد همان پوشه را با مسیرهای سیستمی زیر `/etc/aether` اجرا می‌کند.
-
-### حد کار
-
-- لینک روی دیسک ذخیره می‌شود. پوشهٔ تنظیم حالت ۷۰۰ دارد و خود فایل حالت ۶۰۰.
-- پروکسی محلی فقط به `127.0.0.1` وصل می‌شود. اگر روی آدرس عمومی گوش بدهد، Aether متوقفش می‌کند.
-- فقط همان نصب اول بسته‌ها، اگر apt مستقیم در دسترس نباشد، موقتاً DNS را روی شکن (`178.22.122.100` و `185.51.200.2`) و مخزن آروان‌کلاد می‌گذارد. بعد از کار، resolver و سورس‌های apt به حالت قبل برمی‌گردند.
-- 3x-ui با نصب‌کنندهٔ خود پروژهٔ بالادست نصب می‌شود. Aether آن را دانلود می‌کند و شمارهٔ نسخه را به آن می‌دهد.
+</div>

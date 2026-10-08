@@ -1,0 +1,36 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="548" viewBox="0 0 760 548" role="img">
+  <title>Aether terminal</title>
+  <rect width="760" height="548" rx="18" fill="#f4f7fb" stroke="#d5e0ea"/>
+  <rect width="760" height="42" rx="18" fill="#e7eef5"/>
+  <rect y="22" width="760" height="20" fill="#e7eef5"/>
+  <line x1="0" y1="42" x2="760" y2="42" stroke="#d5e0ea"/>
+  <circle cx="26" cy="21" r="5.5" fill="#e06c75"/>
+  <circle cx="46" cy="21" r="5.5" fill="#d19a66"/>
+  <circle cx="66" cy="21" r="5.5" fill="#98c379"/>
+  <text x="380" y="26" text-anchor="middle" fill="#5c7080" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13">aether</text>
+  <text x="36" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="18" font-weight="700" fill="#0e7490">AETHER</text>
+  <text x="132" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#5c7080">uplink control</text>
+  <text x="684" y="78" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#5c7080">v1.1</text>
+  <rect x="36" y="96" width="688" height="1.5" fill="#c5d2de"/>
+  <text x="36" y="132" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#5c7080">uplink</text>
+  <text x="156" y="132" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#12202c">configured</text>
+  <text x="36" y="158" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#5c7080">endpoint</text>
+  <text x="156" y="158" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#12202c">127.0.0.1:2080</text>
+  <circle cx="318" cy="153" r="4" fill="#047857"/>
+  <text x="332" y="158" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#047857">running</text>
+  <text x="36" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" fill="#5c7080">scope</text>
+  <text x="156" y="184" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14" font-weight="700" fill="#12202c">application</text>
+  <text x="36" y="220" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="13" fill="#7b8c9a">Only programs launched through Aether use the uplink.</text>
+  <text x="36" y="262" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="15" font-weight="700" fill="#12202c">Menu</text>
+  <text x="36" y="294" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[1]</tspan><tspan fill="#12202c">  Check</tspan><tspan fill="#7b8c9a">            GitHub, Ubuntu, Docker</tspan></text>
+  <text x="36" y="318" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[2]</tspan><tspan fill="#12202c">  Packages</tspan><tspan fill="#7b8c9a">         Update, upgrade, install</tspan></text>
+  <text x="36" y="342" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[3]</tspan><tspan fill="#12202c">  Docker</tspan><tspan fill="#7b8c9a">           Install, pull, registry access</tspan></text>
+  <text x="36" y="366" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[4]</tspan><tspan fill="#12202c">  Download</tspan><tspan fill="#7b8c9a">         Save a file through the uplink</tspan></text>
+  <text x="36" y="390" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[5]</tspan><tspan fill="#12202c">  VPN panels</tspan><tspan fill="#7b8c9a">       Install 3x-ui</tspan></text>
+  <text x="36" y="414" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[6]</tspan><tspan fill="#12202c">  Traffic scope</tspan><tspan fill="#7b8c9a">    Application, system proxy, tunnel</tspan></text>
+  <text x="36" y="438" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[7]</tspan><tspan fill="#12202c">  Settings</tspan><tspan fill="#7b8c9a">         Uplink, enable, uninstall</tspan></text>
+  <text x="36" y="462" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[8]</tspan><tspan fill="#12202c">  Update</tspan><tspan fill="#7b8c9a">           Download the latest Aether</tspan></text>
+  <text x="36" y="486" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="14"><tspan fill="#0e7490">[0]</tspan><tspan fill="#12202c">  Exit</tspan></text>
+  <text x="36" y="522" font-family="ui-monospace, SFMono-Regular, Menlo, Consolas, monospace" font-size="16" fill="#0e7490">:</text>
+  <rect x="54" y="508" width="9" height="16" fill="#12202c"/>
+</svg>
