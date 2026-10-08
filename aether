@@ -1,0 +1,133 @@
+#!/usr/bin/env bash
+# Aether — uplink control for Linux.
+set -euo pipefail
+
+resolve_root() {
+  local src="${BASH_SOURCE[0]}"
+  while [[ -L "$src" ]]; do
+    local dir
+    dir="$(cd "$(dirname "$src")" && pwd)"
+    src="$(readlink "$src")"
+    [[ "$src" != /* ]] && src="${dir}/${src}"
+  done
+  cd "$(dirname "$src")" && pwd
+}
+
+AETHER_ROOT="$(resolve_root)"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/versions.env"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/ui.sh"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/config.sh"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/bootstrap.sh"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/engine.sh"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/actions.sh"
+# shellcheck disable=SC1091
+. "${AETHER_ROOT}/lib/menus.sh"
+
+trap 'printf "%s\n" "$C_RESET"; exit 130' INT
+trap 'printf "%s\n" "$C_RESET"; exit 143' TERM
+
+usage() {
+  cat <<EOF
+Aether ${AETHER_VERSION}
+
+Usage:
+  aether                         Open the menu
+  aether status                  Show the current state
+  aether check                   Test the uplink
+  aether on                      Enable the saved uplink
+  aether off                     Disable Aether
+  aether scope tool|system|tunnel
+  aether set <link>              Save an uplink and enable it
+  aether parse <link>            Show a link summary, without secrets
+  aether exec -- <command>       Run a command through the uplink
+  aether update                  Install the latest Aether from GitHub
+  aether version
+  aether help
+
+Scopes:
+  tool      Only commands launched by Aether use the uplink. This is the default.
+  system    Publish a system proxy so programs that honor it use the uplink.
+  tunnel    Send all server traffic through the uplink.
+
+The local endpoint stays on 127.0.0.1. Aether does not provide a VPN server.
+EOF
+}
+
+main() {
+  local cmd="${1:-}"
+  case "$cmd" in
+    "" )
+      main_menu
+      ;;
+    help|-h|--help)
+      usage
+      ;;
+    version|-v|--version)
+      printf 'aether %s\n' "$AETHER_VERSION"
+      ;;
+    parse)
+      shift
+      [[ -n "${1:-}" ]] || { ui_err "Usage: aether parse <link>"; exit 1; }
+      python3 "$AETHER_LINK_PY" parse --link "$1" --json
+      ;;
+    status)
+      require_root
+      draw_header
+      ui_title "Status"
+      show_status
+      ;;
+    check)
+      require_root
+      require_linux
+      check_connection
+      ;;
+    on|enable)
+      require_root
+      require_linux
+      enable_access
+      ;;
+    off|disable)
+      require_root
+      require_linux
+      disable_access
+      ;;
+    scope)
+      require_root
+      require_linux
+      shift
+      [[ -n "${1:-}" ]] || { ui_err "Usage: aether scope tool|system|tunnel"; exit 1; }
+      set_scope "$1"
+      ;;
+    set)
+      require_root
+      require_linux
+      shift
+      [[ -n "${1:-}" ]] || { ui_err "Usage: aether set <link>"; exit 1; }
+      configure_from_link "$1"
+      ;;
+    exec)
+      require_root
+      require_linux
+      shift
+      [[ "${1:-}" == "--" ]] && shift
+      [[ $# -gt 0 ]] || { ui_err "Usage: aether exec -- <command>"; exit 1; }
+      run_with_env "$@"
+      ;;
+    update)
+      require_root
+      update_aether
+      ;;
+    *)
+      ui_err "Unknown command. Run: aether help"
+      exit 1
+      ;;
+  esac
+}
+
+main "$@"
