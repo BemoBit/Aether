@@ -24,7 +24,7 @@
   <a href="LICENSE"><img alt="MIT license" src="https://img.shields.io/badge/license-MIT-0e7490?style=flat"></a>
   <img alt="Linux with systemd" src="https://img.shields.io/badge/platform-Linux%20%2B%20systemd-0f766e?style=flat">
   <a href="https://github.com/SagerNet/sing-box"><img alt="sing-box 1.14.2" src="https://img.shields.io/badge/sing--box-1.14.2-155e75?style=flat"></a>
-  <img alt="Release 1.1" src="https://img.shields.io/badge/release-1.1-334155?style=flat">
+  <a href="https://github.com/BemoBit/Aether/releases"><img alt="Release 1.1" src="https://img.shields.io/badge/release-1.1-334155?style=flat"></a>
 </p>
 
 <p align="center">
@@ -41,9 +41,7 @@
   <a href="#fa">فارسی</a>
 </p>
 
-You bring the uplink. Aether runs it on the server and opens a menu for the jobs that stall when GitHub, Docker Hub, or the Ubuntu archive is hard to reach: package installs, image pulls, file downloads, and the official 3x-ui installer.
-
-The engine is [sing-box](https://github.com/SagerNet/sing-box) 1.14.2. The local endpoint stays on `127.0.0.1`. Release 1.1.
+Aether is uplink control for a Linux server. You bring an HTTP, SOCKS, VLESS, VMess, Trojan, or Shadowsocks link. Aether runs it through [sing-box](https://github.com/SagerNet/sing-box) 1.14.2 on `127.0.0.1`, then opens a terminal menu for the jobs that stall when GitHub, Docker Hub, or the Ubuntu archive is hard to reach: package installs, image pulls, file downloads, and the official 3x-ui installer. Release 1.1.
 
 <a id="install"></a>
 
@@ -239,7 +237,7 @@ The parser tests need no root access and no network. `sudo ./aether` from a chec
   </picture>
 </p>
 
-Aether کنترل آپ‌لینک برای سرور لینوکس است. لینکی را که خودتان دارید روی سیستم به کار می‌گیرد و منویی در ترمینال باز می‌کند. موتور <a href="https://github.com/SagerNet/sing-box">sing-box</a> نسخه 1.14.2 است و فقط روی <code dir="ltr">127.0.0.1</code> گوش می‌دهد. نسخهٔ فعلی 1.1 است.
+Aether کنترل آپ‌لینک برای سرور لینوکس است. لینک HTTP، SOCKS، VLESS، VMess، Trojan یا Shadowsocks را که خودتان دارید، از راه <a href="https://github.com/SagerNet/sing-box">sing-box</a> نسخه 1.14.2 روی <code dir="ltr">127.0.0.1</code> اجرا می‌کند و منویی در ترمینال باز می‌کند. نسخهٔ فعلی 1.1 است.
 
 برای سروری است که نصب بسته، دریافت ایمیج Docker، یا دانلود از GitHub گیر می‌کند. از داخل منو می‌شود فهرست بسته‌ها را به‌روز کرد، Docker نصب کرد، فایل دانلود کرد، و نصب‌کنندهٔ رسمی 3x-ui را اجرا کرد.
 
